@@ -1,0 +1,2 @@
+In the following report we will be deducing the speed of sound in air as well as several solid media, with the use of several experimental
+setups.

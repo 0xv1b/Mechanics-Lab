@@ -1,0 +1,18 @@
+1. Ball drop viscosimeter
+
+- We take 10 balls of roughly equal size and measure and weigh them 
+- We drop each of these balls into a cylinder contains a mix of glycerin and water
+- We measure the distance between the two bands on the cylinder
+- We drop each ball one by one, we start our timer once the bottom of the ball hits the top of the first band, and stop it when the bottom of the ball hits the top of the 2nd band
+
+
+
+2. Liquid shooting down a needle
+
+- We perform this with two needles
+- We record the weight of our measuring beaker.
+- We record the height of the top of the water (We change it by 15 cm or 20 cm for the two diff experiments)
+- We open water flow through needle and start the timer, once enough water has gone into the beaker we stop the water flow, turn off the timer, and measure the new weight.
+- We move the water further up and repeat this process.
+
+- Once we have a dataset for both needles, using a microscope, we record the inner diameter of the needle hole, and the length of the needle.

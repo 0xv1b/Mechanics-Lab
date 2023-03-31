@@ -1,0 +1,23 @@
+1. Speed of sound in Solids
+
+- We choose the 3 solid rods that we wanted to examine (copper, aluminium and PVC)
+- We measured the rods with an extendable ruler
+- We placed the rods straight over the piezoelectric sensor and lightly tapped upon the rod and paused the oscilloscope to analyse the readings
+- We took the duration between 5 peaks in the case of copper and repeated the reading twice to ensure that it was reproducible, obtaining the same results
+- We took the duration between 7 peaks on the oscilloscope for aluminium, and 4 and 3 peaks for PVC
+
+2. Speed of sound in air (2 Microphones)
+
+- We changed the distance between Microphones by 6 cm each time
+- (Possible source of error is that the distance between the actual receiver of the microphone was not accounted for, line will not go through origin)
+- We clacked two balls about a meter away at the same height as the microphones and paused the oscilloscope
+- We noted down the error of the oscilloscope and the distance between the first peak/trough of the first microphone, and the corresponding peak/trough on the second
+
+
+3. Speed of sound in air (Resonance)
+
+- We set the frequency generator to 500 Hz, 1 kHz, and 2 kHz
+- We slowly moved the padding up and down as to alter the length of the tube until we saw the greatest movement in the oscilloscope, and took those points as Resonance
+- We noted these values down for all the 3 frequencies
+
+ - (The tube was open on one end and closed on the other end, so the first resonance would come at 1/4th of the wavelength)
