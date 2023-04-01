@@ -1,27 +1,31 @@
+import math
+import error
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
+from uncertainties import ufloat
+from uncertainties import unumpy
 
 # Data Retrieval
 sheet_id = "1sZzhWCqxi44YKxXbq1tyydLVGl66UPOIH3cLEblhoKQ"
-sheet_1, sheet_2, sheet_3, sheet_4 = ("50C", "30C", "37C", "45C")
-get_url = lambda sheet : f"https://docs.google.com/spreadsheets/d/{sheet_id}/gviz/tq?tqx=out:csv&sheet={sheet}"
+sheet_name = "50C"
+dataframe = pd.read_csv(f"https://docs.google.com/spreadsheets/d/{sheet_id}/gviz/tq?tqx=out:csv&sheet={sheet_name}")
 
-# Google sheets data stored in pandas dataframes
-dataframe_50C = pd.read_csv(get_url(sheet_1))
-dataframe_30C = pd.read_csv(get_url(sheet_2))
-dataframe_37C = pd.read_csv(get_url(sheet_3))
-dataframe_45C = pd.read_csv(get_url(sheet_4))
 
-# Test
-# print(dataframe_50C["Volume"][4])
 
-# Plotting 50°C curve
-x_data = dataframe_50C["1/Volume"][0:21]
-x_error = dataframe_50C["Error (1/Volume)"][0:21]
-y_data = dataframe_50C["Pressure * Volume"][0:21]
-y_error = dataframe_50C["Error (Pressure * Volume)"][0:21]
+# Data Formatting
+#x_data = dataframe["1/Volume"][0:21]
+#x_error = dataframe["Error (1/Volume)"][0:21]
+#y_data = dataframe["Pressure * Volume"][0:21]
+#y_error = dataframe["Error (Pressure * Volume)"][0:21]
+
+x_data = dataframe["1/Volume (cm^-3)"][0:21]
+x_error = dataframe["Error (1/Volume) (cm^-3)"][0:21]
+y_data = dataframe["Pressure * Volume (Bar * cm^3)"][0:21]
+y_error = dataframe["Error (Pressure * Volume) (Bar * cm^3)"][0:21]
+
+
 
 def line(x, m, c):
     return m*x + c
@@ -32,14 +36,27 @@ print(m, c)
 x_line = np.linspace(0, 0.5)
 y_line = line(x_line, m, c)
 
+worst_x = [x_data[0] + x_error[0], x_data[len(x_data) - 1] - x_error[len(x_error) - 1]]
+worst_y = [y_data[0] - y_error[0], y_data[len(y_data) - 1] + y_error[len(y_error) - 1]]
+
+(m_bad, c_bad), paramcov = curve_fit(line, worst_x, worst_y)
+#print(m_bad, c_bad)
+
+x_w_line = np.linspace(0, 0.5)
+y_w_line = line(x_line, m_bad, c_bad)
+
 
 fig, ax =  plt.subplots()
-ax.errorbar(x_data, y_data, xerr= x_error, yerr = y_error, fmt="o")
+points= []
+ax.errorbar(x_data, y_data, xerr= x_error, yerr = y_error, fmt="o--", capsize=2, capthick=1, ms=3) 
 
-ax.plot(x_line, y_line)
+ax.plot(x_line, y_line, c="green")
+ax.plot(x_w_line, y_w_line, c="red")
 
-plt.xlabel("Pressure * Volume")
-plt.ylabel("1/Volume")
-plt.title("ZUS")
+plt.xlabel("1/Volume [cm^-3]", fontsize=24)
+plt.ylabel("Pressure * Volume [Bar * cm^3]", fontsize=24)
+plt.title("Determining no. of moles", fontsize=32)
+plt.grid(True)
+plt.legend(["Best fit line", "Worst fit line", "Data points"], fontsize=24)
 
 plt.show()
