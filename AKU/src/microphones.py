@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit, fmin
+from uncertainties import ufloat
 
 # Data Retrieval and Formatting
 sheet_id = "1wUUL4bo96UOyQWv32BtwYP6PANxHw7POJzXLyf0Nyus"
@@ -32,49 +33,48 @@ def line(x, m, c):
     return m*x + c
 
 # Slope is 347.6678795109381 m/s
-(m, c), cov = curve_fit(line, time_s, distances_m)
-x_fit = np.linspace(0, 1.0, 100)
+(m, c), cov = curve_fit(line, time_µs, distances_cm)
+x_fit = np.linspace(780, 2350, 200)
 y_fit = line(x_fit, m, c)
 
 print(f"slope = {m}")
 print(f"y-intercept = {c}")
-print(cov)
 
 
 # Worst possible line
-worst_distances_1 = [distances_m[0] - err_ruler_m, distances_m[len(distances_m) - 1] + err_ruler_m]
-worst_distances_2 = [distances_m[0] + err_ruler_m, distances_m[len(distances_m) - 1] - err_ruler_m]
+worst_distances = [distances_cm[0] - err_ruler_cm, distances_cm[len(distances_cm) - 1] + err_ruler_cm]
 
-worst_times_1 = [time_s[0] + err_osc_s, time_s[len(time_s) - 1] - err_osc_s]
-worst_times_2 = [time_s[0] - err_osc_s, time_s[len(time_s) - 1] + err_osc_s]
+worst_times = [time_µs[0] + err_osc_µs, time_µs[len(time_µs) - 1] - err_osc_µs]
 
-# 1st Slope is worse (356.82414698162734 m/s)
-(m_bad_1, c_bad_1), cov = curve_fit(line, worst_times_1, worst_distances_1)
-print(f"Worst Slope 1: {m_bad_1}")
-print(f"Error in Slope is: {m_bad_1 - m}")
-print(f"Error in y-intercept is: {c_bad_1 - c}")
+# This Slope is worst (356.82414698162734 m/s)
+(m_bad, c_bad), cov = curve_fit(line, worst_times, worst_distances)
+print(f"Worst Slope 1: {m_bad}")
+print(f"Error in Slope is: {m_bad - m}")
+print(f"Error in y-intercept is: {c_bad - c}")
 
-
-(m_bad_2, c_bad_2), cov = curve_fit(line, worst_times_2, worst_distances_2)
-print(f"Worst Slope 2: {m_bad_2}")
-
+y_bad = line(x_fit, m_bad, c_bad)
 
 # Plotting
-fig, (ax1, ax2) = plt.subplots(2)
+fig, ax= plt.subplots()
 
-ax1.set_xlabel("Time [µs]")
-ax1.set_ylabel("Distance [cm]")
+ax.set_title("Distance vs Time", fontsize=24)
+ax.set_xlabel("Time [µs]", fontsize=24)
+ax.set_ylabel("Distance [cm]", fontsize=24)
 
-ax1.errorbar(time_μs, distances_cm, xerr = err_osc_μs, yerr=err_ruler_cm, capsize=2, capthick=1)
+ax.errorbar(time_μs, distances_cm, xerr = err_osc_μs, yerr=err_ruler_cm,fmt = " ", capsize=2, capthick=1)
+ax.plot(x_fit,y_fit, color="green")
+ax.plot(x_fit,y_bad, color="red")
 
 
-
-ax2.set_xlabel("Time [s]")
-ax2.set_ylabel("Distance [m]")
-
-ax2.scatter(time_s, distances_m)
-ax2.plot(x_fit, y_fit)
-
+plt.legend(["Best fit line","Worst fit line","Data Points (with error)"], fontsize=24)
 plt.show()
 
 # Speed of sound obtained is (347.6678795109381 ± 9.156267470689215) m/s
+
+
+speed_mps = ufloat(347.6678795109381, 9.156267470689215)
+density_kgpm3 = ufloat(1.293, 0)
+pressure_pa = ufloat(96258.8, 133.32)
+
+k = speed_mps**2 * density_kgpm3 / pressure_pa
+print(f"Adiabatic coefficient: {k}")

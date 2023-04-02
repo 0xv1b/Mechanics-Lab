@@ -36,7 +36,7 @@ axes.set_ylabel('Enthalpy [kJ/mol]', fontsize=24)
 axes.set_xlabel('Temperature [K]', fontsize=24)
 axes.set_title('Enthalpy vs Temperature', fontsize=24)
 
-axes.errorbar(temperature, enthalpy, xerr=0.6, yerr= enthalpy_err, fmt=" ", capsize=2, capthick=1)
+axes.errorbar(temperature, enthalpy, xerr=0.6, yerr= enthalpy_err, fmt=" ", capsize=4, capthick=1)
 axes.plot(x_data, y_data, color="green")
 
 axes.legend(["Best fit line", "Data points"], fontsize=24)
