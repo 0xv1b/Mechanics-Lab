@@ -57,19 +57,22 @@ y_bad = line(x_fit, m_bad, c_bad)
 # Plotting
 fig, ax= plt.subplots()
 
-ax.set_title("Distance vs Time", fontsize=24)
+plt.grid(True)
+plt.xticks(fontsize=20)
+plt.yticks(fontsize=20)
+
 ax.set_xlabel("Time [µs]", fontsize=24)
 ax.set_ylabel("Distance [cm]", fontsize=24)
 
 ax.errorbar(time_μs, distances_cm, xerr = err_osc_μs, yerr=err_ruler_cm,fmt = " ", capsize=2, capthick=1)
 ax.plot(x_fit,y_fit, color="green")
-ax.plot(x_fit,y_bad, color="red")
+#ax.plot(x_fit,y_bad, color="red")
 
 
-plt.legend(["Best fit line","Worst fit line","Data Points (with error)"], fontsize=24)
+plt.legend(["Best fit line"], fontsize=24)
 plt.show()
 
-# Speed of sound obtained is (347.6678795109381 ± 9.156267470689215) m/s
+# Speed of sound obtained from microphones (347.6678795109381 ± 9.156267470689215) m/s
 
 
 speed_mps = ufloat(347.6678795109381, 9.156267470689215)
